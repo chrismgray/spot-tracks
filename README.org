@@ -1,0 +1,12 @@
+
+* Spot Tracks
+
+  This is a Clojurescript interface to Google Maps that takes a
+  sequence of latitude and longitude coordinates and time stamps.  It
+  displays the coordinates on a Google Map in the order of the time
+  stamps, with a delay between displaying the coordinates proportional
+  to the delay between the time stamps.
+
+  Also included is a Clojure program for converting a file full of
+  emails from [[http://findmespot.com][SPOT]] into a sequence that is suitable for input to the
+  Clojurescript program.
