@@ -391,18 +391,18 @@
 (def latlongs (map #(maps/LatLng. (:lat %) (:long %))))
 (def center-of-us (maps/LatLng. 39.504014 -97.573257))
 (def map-element (dom/getElement "map"))
-(def map-opts (doto (js-obj) (extend-object! [["zoom" 4]
-                                              ["center" center-of-us]
-                                              ["mapTypeId" types/ROADMAP]])))
+(def map-opts (doto (js-obj) (extend-object! {"zoom" 4
+                                              "center" center-of-us
+                                              "mapTypeId" types/ROADMAP})))
 (def the-map (maps/Map. map-element map-opts))
 
 (defn place-markers []
   (let [latlongs (map #(maps/LatLng. (:lat %) (:long %)) pts)
         marker-opts (map #(extend-object! (js-obj)
-                                          [["map" the-map]
-                                           ["draggable" false]
-                                           ["animation" anims/DROP]
-                                           ["position" %]]) latlongs)]
+                                          {"map" the-map
+                                           "draggable" false
+                                           "animation" anims/DROP
+                                           "position" %}) latlongs)]
     (dorun
      (map #(js/setTimeout
             (fn []
