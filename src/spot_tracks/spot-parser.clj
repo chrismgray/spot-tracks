@@ -4,6 +4,8 @@
         [clj-time.core :as time :only [from-time-zone date-time time-zone-for-offset]]
         [clj-time.coerce :as time-coerce]))
 
+(def num-millis 60000)
+
 (defn create-spot-tracks [filename]
   (let [lines (split-lines (slurp filename))
         latitude-re #"Latitude:(-?\d*\.\d*)"
@@ -36,8 +38,14 @@
                                      (if (= tz "EDT")
                                        (time-zone-for-offset -4)
                                        (time-zone-for-offset -5)))))
-             (map time-coerce/to-long))
-        lat-longs (map (fn [lat long time] {:lat lat :long long :time time}) latitudes longitudes times)]
+             (map time-coerce/to-long)             )
+        lat-longs (map (fn [lat long time] {:lat lat :long long :time time}) latitudes longitudes times)
+        lat-longs (sort-by :time lat-longs)
+        first-time (:time (first lat-longs))
+        lat-longs (map #(update-in % [:time] (fn [time] (- time first-time))) lat-longs)
+        last-time (:time (last lat-longs))
+        lat-longs (map #(update-in % [:time] (fn [time] (double (/ time (/ last-time num-millis))))) lat-longs)
+        ]
     lat-longs))
 
 (comment
