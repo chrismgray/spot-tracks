@@ -10,16 +10,19 @@
         longitude-re #"Longitude:(-?\d*\.\d*)"
         time-re #"GPS location Date/Time:(\d\d)/(\d\d)/(\d\d\d\d) (\d\d):(\d\d):(\d\d) (...)"
         parse-int (fn [x] (Integer/parseInt x))
+        parse-float (fn [x] (Float/parseFloat x))
         latitudes (->> lines
                        (map (partial re-seq latitude-re))
                        (remove nil?)
                        (map first)
-                       (map second))
+                       (map second)
+                       (map parse-float))
         longitudes (->> lines
                         (map (partial re-seq longitude-re))
                         (remove nil?)
                         (map first)
-                        (map second))
+                        (map second)
+                        (map parse-float))
         times
         (->> lines
              (map (partial re-seq time-re))
